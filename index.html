@@ -6,242 +6,300 @@
     <title>Ray的小屋</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
             margin: 0;
             font-family: Arial, sans-serif;
-            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            background-size: cover;
+            background-position: center;
         }
-        header {
+        .header {
+            background-color: #ccc;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #ccc;
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        header h1 {
-            margin: 0;
+        .header .site-title {
             font-size: 24px;
+            color: #333;
         }
-        header nav {
+        .header nav {
             display: flex;
             gap: 20px;
         }
-        header nav a {
+        .header nav a {
             text-decoration: none;
-            color: #333;
             font-size: 16px;
+            color: #333;
         }
-        header nav a:hover {
-            text-decoration: underline;
+        .header nav a:hover {
+            color: #555;
         }
-        main {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-        nav {
-            width: 200px;
+        .sidebar {
             background-color: #f4f4f4;
+            width: 200px;
+            min-width: 150px;
             padding: 10px;
-            border-right: 1px solid #ccc;
+            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            bottom: 0;
             overflow-y: auto;
             resize: horizontal;
             overflow: auto;
+            transition: background-color 0.3s;
         }
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-        nav ul li {
-            padding: 10px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav ul li:hover {
-            background-color: #ddd;
-        }
-        #add-site {
-            text-align: center;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            border-radius: 10px;
-        }
-        .modal input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        .modal button {
-            padding: 10px;
-            margin-right: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .modal button#confirm {
-            background-color: #f44336;
-            color: white;
-        }
-        .modal button#cancel {
+        .sidebar:hover {
             background-color: #e0e0e0;
         }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+        .sidebar h2 {
+            font-size: 20px;
+            color: #333;
         }
-        footer {
-            background-color: #ccc;
-            padding: 5px 10px;
-            text-align: center;
-            font-size: 14px;
-        }
-        .site-item {
+        .sidebar .nav-item {
+            margin: 10px 0;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-        .site-item button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: red;
+        .sidebar .nav-item a {
+            text-decoration: none;
             font-size: 16px;
+            color: #333;
         }
-        .site-item button.edit {
-            color: blue;
+        .sidebar .nav-item a:hover {
+            color: #555;
+        }
+        .main-content {
+            margin-left: 200px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-content .card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 10px;
+        }
+        .main-content h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        .main-content #datetime {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #555;
+        }
+        .upload-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .upload-btn input[type="file"] {
+            display: none;
+        }
+        .footer {
+            background: #333;
+            color: #ccc;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+        .add-url {
+            display: none;
+            margin-top: 10px;
+        }
+        .add-url input {
+            width: 100%;
+            padding: 5px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        .add-url button {
+            padding: 5px 10px;
+            margin: 5px 5px 5px 0;
+            cursor: pointer;
+        }
+        .nav-item .actions {
+            display: none;
+            margin-left: 10px;
+        }
+        .nav-item:hover .actions {
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Ray的小屋</h1>
+    <div class="header">
+        <div class="site-title">Ray的小屋</div>
         <nav>
-            <a href="#home">主页</a>
-            <a href="#about">关于我</a>
-            <a href="#contact">联系</a>
+            <a href="#">主页</a>
+            <a href="#">关于我</a>
+            <a href="#">联系</a>
         </nav>
-    </header>
-    <main>
-        <nav>
-            <ul>
-                <li id="main-page">主页</li>
-                <li id="add-site">+</li>
-            </ul>
-        </nav>
-        <div class="content" id="content">
-            <p>请选择一个选项</p>
-        </div>
-    </main>
-    <footer>
-        &copy; 2024 Ray Wang 王耀锋 保留所有权利
-        <p><a href="/privacy-policy">隐私政策</a> | <a href="/terms-of-service">服务条款</a></p>
-    </footer>
-    <div class="modal" id="modal">
-        <input type="text" id="site-name" placeholder="网站名称">
-        <input type="text" id="site-url" placeholder="网址">
-        <button id="confirm">确认</button>
-        <button id="cancel">取消</button>
     </div>
-    <div class="overlay" id="overlay"></div>
+    <div class="sidebar" id="sidebar">
+        <h2>Ray的小屋</h2>
+        <div class="nav-item">
+            <a href="#" onclick="showCurrentDateTime()">主页</a>
+        </div>
+        <div class="nav-item" id="add-url-item">
+            <a href="#" onclick="toggleAddUrl()">+</a>
+        </div>
+        <div class="add-url" id="add-url-form">
+            <input type="text" id="site-name" placeholder="网站名称">
+            <input type="url" id="site-url" placeholder="网址" onblur="fetchWebsiteTitle()">
+            <button onclick="addUrl()">确认</button>
+            <button onclick="toggleAddUrl()">取消</button>
+        </div>
+    </div>
+    <div class="main-content" id="main-content">
+        <div class="card">
+            <h1>欢迎来到Ray的小屋</h1>
+            <div id="datetime"></div>
+        </div>
+    </div>
+    <div class="upload-btn" onclick="document.getElementById('bg-upload').click();">
+        📷
+        <input type="file" id="bg-upload" accept="image/png, image/jpeg" onchange="uploadBackground(event)">
+    </div>
+    <div class="footer">
+        © 2024 Ray Wang 王耀锋 保留所有权利
+    </div>
 
     <script>
-        document.getElementById('main-page').addEventListener('click', function() {
-            const content = document.getElementById('content');
+        function showCurrentDateTime() {
             const now = new Date();
-            content.innerHTML = `<p>当前时间：${now.toLocaleString()}</p>`;
-        });
+            const datetime = now.toLocaleString();
+            document.getElementById('datetime').innerText = datetime;
+            setTimeout(showCurrentDateTime, 1000); // 更新时间，每秒刷新一次
+        }
 
-        document.getElementById('add-site').addEventListener('click', function() {
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        });
+        function toggleAddUrl() {
+            const form = document.getElementById('add-url-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
 
-        document.getElementById('cancel').addEventListener('click', function() {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        });
+        function fetchWebsiteTitle() {
+            const urlInput = document.getElementById('site-url').value;
+            if (urlInput) {
+                fetch(`https://textance.herokuapp.com/title/${urlInput}`)
+                    .then(response => response.text())
+                    .then(title => {
+                        document.getElementById('site-name').value = title;
+                    })
+                    .catch(() => {
+                        // Handle error or no title found
+                    });
+            }
+        }
 
-        document.getElementById('confirm').addEventListener('click', function() {
-            const siteName = document.getElementById('site-name').value;
-            const siteUrl = document.getElementById('site-url').value;
-            if (siteName && siteUrl) {
-                const ul = document.querySelector('nav ul');
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div class="site-item">
-                        <span>${siteName}</span>
-                        <div>
-                            <button class="edit">✏️</button>
-                            <button class="delete">×</button>
-                        </div>
-                    </div>
-                `;
-                li.querySelector('.delete').addEventListener('click', function() {
-                    if (confirm('确定要删除此网站吗？')) {
-                        ul.removeChild(li);
-                    }
-                });
-                li.querySelector('.edit').addEventListener('click', function() {
-                    const newName = prompt('修改网站名称', siteName);
+        function addUrl() {
+            const name = document.getElementById('site-name').value;
+            const url = document.getElementById('site-url').value;
+
+            if (name && url) {
+                const newNavItem = document.createElement('div');
+                newNavItem.classList.add('nav-item');
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.innerText = name;
+                link.onclick = function(event) {
+                    event.preventDefault();
+                    showWebsiteThumbnail(url);
+                };
+                newNavItem.appendChild(link);
+
+                const actions = document.createElement('div');
+                actions.classList.add('actions');
+
+                const deleteButton = document.createElement('span');
+                deleteButton.innerHTML = '❌';
+                deleteButton.style.color = 'red';
+                deleteButton.style.cursor = 'pointer';
+                deleteButton.onclick = function() {
+                    newNavItem.remove();
+                };
+                actions.appendChild(deleteButton);
+
+                const editButton = document.createElement('span');
+                editButton.innerHTML = '✏️';
+                editButton.style.color = 'blue';
+                editButton.style.cursor = 'pointer';
+                editButton.onclick = function() {
+                    const newName = prompt('修改网站名称', name);
                     if (newName) {
-                        li.querySelector('span').textContent = newName;
+                        link.innerText = newName;
                     }
-                });
-                li.addEventListener('click', function() {
-                    const content = document.getElementById('content');
-                    content.innerHTML = `<iframe src="${siteUrl}" style="width:100%; height:100%; border:none;"></iframe>`;
-                });
-                ul.insertBefore(li, document.getElementById('add-site'));
-                document.getElementById('modal').style.display = 'none';
-                document.getElementById('overlay').style.display = 'none';
-            }
-        });
+                };
+                actions.appendChild(editButton);
 
-        document.getElementById('site-url').addEventListener('input', async function() {
-            const url = this.value;
-            if (url) {
-                try {
-                    const response = await fetch(`https://cors-anywhere.herokuapp.com/${url}`);
-                    const text = await response.text();
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(text, 'text/html');
-                    const title = doc.querySelector('title').innerText;
-                    document.getElementById('site-name').value = title;
-                } catch (error) {
-                    console.error('Error fetching site name:', error);
-                }
+                newNavItem.appendChild(actions);
+                document.querySelector('.sidebar').insertBefore(newNavItem, document.getElementById('add-url-item'));
+
+                document.getElementById('site-name').value = '';
+                document.getElementById('site-url').value = '';
+                toggleAddUrl();
             }
-        });
+        }
+
+        function showWebsiteThumbnail(url) {
+            const mainContent = document.getElementById('main-content');
+            mainContent.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;"></iframe>`;
+        }
+
+        const sidebar = document.getElementById('sidebar');
+        sidebar.addEventListener('mousedown', initResize, false);
+
+        function initResize(e) {
+            window.addEventListener('mousemove', Resize, false);
+            window.addEventListener('mouseup', stopResize, false);
+        }
+
+        function Resize(e) {
+            sidebar.style.width = (e.clientX - sidebar.offsetLeft) + 'px';
+        }
+
+        function stopResize(e) {
+            window.removeEventListener('mousemove', Resize, false);
+            window.removeEventListener('mouseup', stopResize, false);
+        }
+
+        function uploadBackground(event) {
+            const file = event.target.files[0];
+            if (file && file.size <= 5 * 1024 * 1024) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('文件大小超过限制或格式不支持。');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', showCurrentDateTime);
     </script>
 </body>
 </html>
